@@ -1,13 +1,57 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Editor from "@monaco-editor/react";
 import LanguageSelector from "./LanguageSelector";
 import { CODE_SNIPPETS } from "../constants";
 import Output from "./Output";
 
-const CodeEditor = () => {
-  const editorRef = useRef();
+const CodeEditor = ({ socketRef, roomId }) => {
+  const editorRef = useRef(null);
   const [value, setValue] = useState(CODE_SNIPPETS["javascript"]);
   const [language, setLanguage] = useState("javascript");
+
+  // Prevent rebroadcast of remote code
+  const isRemoteUpdate = useRef(false);
+
+  useEffect(() => {
+  if (!socketRef.current) return;
+
+  const handleCodeChange = ({ code }) => {
+    const editor = editorRef.current;
+    if (!editor) return;
+
+    const currentCode = editor.getValue();
+    if (currentCode === code) return; // avoid unnecessary updates
+
+    // Save current cursor position
+    const selection = editor.getSelection();
+
+    // Prevent loop (if you're broadcasting change on `onChange`)
+    isRemoteUpdate.current = true;
+
+    editor.setValue(code);
+
+    // Restore the cursor position (or at least try to be close)
+    if (selection) {
+      editor.setSelection(selection);
+    }
+  };
+
+  socketRef.current.on("code-change", handleCodeChange);
+
+  // Handle language changes -
+
+  const handleLanguageChange = ({language}) => {
+    setLanguage(language);
+    setValue(CODE_SNIPPETS[language]);
+  }
+
+  socketRef.current.on("language-change", handleLanguageChange);
+
+  return () => {
+    socketRef.current.off("code-change", handleCodeChange);
+    socketRef.current.off('language-change',handleLanguageChange)
+  };
+}, [socketRef.current]);
 
   const onMount = (editor) => {
     editorRef.current = editor;
@@ -17,6 +61,27 @@ const CodeEditor = () => {
   const onLanguageChange = (language) => {
     setLanguage(language);
     setValue(CODE_SNIPPETS[language]);
+
+    socketRef.current.emit('language-change',{
+      roomId,
+      language
+    })
+
+  };
+
+  const onCodeChange = (newValue) => {
+    if (isRemoteUpdate.current) {
+      isRemoteUpdate.current = false;
+      return;
+    }
+
+    setValue(newValue);
+    // console.log("Emitting code:", newValue);
+
+    socketRef.current?.emit("code-change", {
+      roomId,
+      code: newValue,
+    });
   };
 
   return (
@@ -27,12 +92,12 @@ const CodeEditor = () => {
           onLanguageChange={onLanguageChange}
         />
         <Editor
+          key={language}
           height="75vh"
           theme="vs-dark"
           language={language}
-          defaultValue="// some comment"
           value={value}
-          onChange={(value) => setValue(value)}
+          onChange={onCodeChange}
           onMount={onMount}
         />
       </div>
@@ -44,3 +109,5 @@ const CodeEditor = () => {
 };
 
 export default CodeEditor;
+
+
