@@ -60,13 +60,11 @@ const EditorPage = () => {
     init();
 
     return () => {
-      return () => {
-        if (socketRef.current) {
-          socketRef.current.disconnect();
-          socketRef.current.off("joined");
-          socketRef.current.off("disconnected");
-        }
-      };
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+        socketRef.current.off("joined");
+        socketRef.current.off("disconnected");
+      }
     };
   }, [location.state]);
 
