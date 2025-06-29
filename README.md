@@ -28,8 +28,8 @@ Multiple users can join the same room and collaborate live with synchronized cod
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/collab-editor.git
-cd collab-editor
+git clone https://github.com/priyanshu0511/realtime-collaborative-code-editor.git
+cd realtime-collaborative-code-editor
 
 ```
 
