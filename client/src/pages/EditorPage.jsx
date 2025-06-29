@@ -19,9 +19,12 @@ const EditorPage = () => {
   const [clients, setClients] = useState([]);
 
   useEffect(() => {
-    if (location.state?.username) {
-      toast.success(`Room joined as ${location.state.username}`);
-    }
+  if (location.state?.username) {
+    toast.success(`Room joined as ${location.state.username}`);
+  }
+}, []);
+
+  useEffect(() => {
     const init = async () => {
       const handleErr = (err) => {
         console.log("Socket Error => ", err);
