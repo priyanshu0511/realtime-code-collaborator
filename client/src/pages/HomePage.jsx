@@ -29,7 +29,6 @@ const HomePage = () => {
     navigate(`/editor/${roomId}`, {
       state: { username },
     });
-    toast.success("Room Joined.");
   };
 
   return (

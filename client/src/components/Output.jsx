@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { executeCode } from "../api";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 const Output = ({ editorRef, language }) => {
   const [output, setOutput] = useState(null);
@@ -50,7 +50,6 @@ const Output = ({ editorRef, language }) => {
           )}
         </pre>
       </div>
-      <ToastContainer />
     </div>
   );
 };
