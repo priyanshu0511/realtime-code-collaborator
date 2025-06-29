@@ -16,6 +16,7 @@ const io = new Server(server, {
 });
 
 const userSocketMap = {};
+const roomData = {};
 
 const getAllConnectedClients = (roomId) => {
   return Array.from(io.sockets.adapter.rooms.get(roomId) || []).map(
@@ -29,12 +30,17 @@ const getAllConnectedClients = (roomId) => {
 };
 
 io.on("connection", (socket) => {
-  console.log(`User Connected: ${socket.id}`);
+  // console.log(`User Connected: ${socket.id}`);
 
   socket.on("join", ({ roomId, username }) => {
     userSocketMap[socket.id] = username;
     socket.join(roomId);
     const clients = getAllConnectedClients(roomId);
+
+    if(roomData[roomId]){
+      // console.log("Sending sync-data to", socket.id, roomData[roomId]);
+      socket.emit('sync-code',roomData[roomId]);
+    }
 
     //Notify all users that new user has joined-
     clients.forEach(({ socketId }) => {
@@ -59,11 +65,19 @@ io.on("connection", (socket) => {
 
   socket.on("code-change", ({ roomId, code }) => {
     // console.log(`Code received from ${socket.id} for room ${roomId}`);
+    roomData[roomId]={
+      ...(roomData[roomId]||{}),
+      code
+    }
     socket.in(roomId).emit("code-change", { code });
   });
 
-  socket.on("language-change", ({ roomId, code }) => {
-    socket.in(roomId).emit("language-change", { code });
+  socket.on("language-change", ({ roomId, language }) => {
+    roomData[roomId]={
+      ...(roomData[roomId]||{}),
+      language
+    }
+    socket.in(roomId).emit("language-change", { language });
   });
 });
 

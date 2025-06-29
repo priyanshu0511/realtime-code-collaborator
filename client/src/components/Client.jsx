@@ -8,13 +8,15 @@ const Client = ({ socketId, username }) => {
           src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
             username
           )}&background=random&size=40`}
-          alt={`${username} Avatar`} className="rounded-md"
+          alt={`${username} Avatar`}
+          className="rounded-md"
         />
       </div>
 
       <div
         className="w-40 truncate text-ellipsis overflow-hidden whitespace-nowrap"
-        title={username}>
+        title={username}
+      >
         {username}
       </div>
     </div>
