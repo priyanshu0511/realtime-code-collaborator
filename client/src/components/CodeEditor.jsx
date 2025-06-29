@@ -13,45 +13,61 @@ const CodeEditor = ({ socketRef, roomId }) => {
   const isRemoteUpdate = useRef(false);
 
   useEffect(() => {
-  if (!socketRef.current) return;
+    if (!socketRef.current) return;
 
-  const handleCodeChange = ({ code }) => {
-    const editor = editorRef.current;
-    if (!editor) return;
+    const handleCodeChange = ({ code }) => {
+      const editor = editorRef.current;
+      if (!editor) return;
 
-    const currentCode = editor.getValue();
-    if (currentCode === code) return; // avoid unnecessary updates
+      const currentCode = editor.getValue();
+      if (currentCode === code) return; // avoid unnecessary updates
 
-    // Save current cursor position
-    const selection = editor.getSelection();
+      // Save current cursor position
+      const selection = editor.getSelection();
 
-    // Prevent loop (if you're broadcasting change on `onChange`)
-    isRemoteUpdate.current = true;
+      // Prevent loop (if you're broadcasting change on `onChange`)
+      isRemoteUpdate.current = true;
 
-    editor.setValue(code);
+      editor.setValue(code);
 
-    // Restore the cursor position (or at least try to be close)
-    if (selection) {
-      editor.setSelection(selection);
-    }
-  };
+      // Restore the cursor position (or at least try to be close)
+      if (selection) {
+        editor.setSelection(selection);
+      }
+    };
 
-  socketRef.current.on("code-change", handleCodeChange);
+    const handleSyncData = ({ code, language }) => {
+      // console.log("Received sync-data:", { code, language });
+      if (code) {
+        isRemoteUpdate.current = true;
+        editorRef.current?.setValue(code);
+        setValue(code);
+      }
+      if (language) {
+        setLanguage(language);
+      }
+    };
 
-  // Handle language changes -
+    socketRef.current.on("code-change", handleCodeChange);
 
-  const handleLanguageChange = ({language}) => {
-    setLanguage(language);
-    setValue(CODE_SNIPPETS[language]);
-  }
+    // Handle language changes -
 
-  socketRef.current.on("language-change", handleLanguageChange);
+    const handleLanguageChange = ({ language }) => {
+      // console.log('Recieved language-change: ',language);
+      setLanguage(language);
+      setValue(CODE_SNIPPETS[language]);
+    };
 
-  return () => {
-    socketRef.current.off("code-change", handleCodeChange);
-    socketRef.current.off('language-change',handleLanguageChange)
-  };
-}, [socketRef.current]);
+    socketRef.current.on("language-change", handleLanguageChange);
+
+    socketRef.current.on("sync-code", handleSyncData);
+
+    return () => {
+      socketRef.current.off("code-change", handleCodeChange);
+      socketRef.current.off("language-change", handleLanguageChange);
+      socketRef.current.off("sync-code", handleSyncData);
+    };
+  }, [socketRef.current]);
 
   const onMount = (editor) => {
     editorRef.current = editor;
@@ -61,12 +77,12 @@ const CodeEditor = ({ socketRef, roomId }) => {
   const onLanguageChange = (language) => {
     setLanguage(language);
     setValue(CODE_SNIPPETS[language]);
+    // console.log("Emitting language change:",language);
 
-    socketRef.current.emit('language-change',{
+    socketRef.current.emit("language-change", {
       roomId,
-      language
-    })
-
+      language,
+    });
   };
 
   const onCodeChange = (newValue) => {
@@ -109,5 +125,3 @@ const CodeEditor = ({ socketRef, roomId }) => {
 };
 
 export default CodeEditor;
-
-

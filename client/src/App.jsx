@@ -1,10 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
-import HomePage from "./pages/HomePage"
-import EditorPage from "./pages/EditorPage"
-import { ToastContainer } from "react-toastify"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import EditorPage from "./pages/EditorPage";
+import { ToastContainer } from "react-toastify";
 
 function App() {
-  
   return (
     <div className="h-screen bg-darkBg">
       <Router>
@@ -15,7 +14,7 @@ function App() {
       </Router>
       <ToastContainer />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

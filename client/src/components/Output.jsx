@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { executeCode } from "../api";
-import {ToastContainer,toast} from 'react-toastify';
+import { ToastContainer, toast } from "react-toastify";
 
 const Output = ({ editorRef, language }) => {
   const [output, setOutput] = useState(null);
@@ -10,21 +10,19 @@ const Output = ({ editorRef, language }) => {
     const sourceCode = editorRef.current.getValue();
     if (!sourceCode) return;
     try {
-        setIsLoading(true);
+      setIsLoading(true);
       const { run: result } = await executeCode(sourceCode, language);
-      if(result.stderr){
-        setOutput("Error!!\n\n"+result.output);
-      }
-      else{
+      if (result.stderr) {
+        setOutput("Error!!\n\n" + result.output);
+      } else {
         setOutput(result.output);
       }
     } catch (error) {
-        console.log(error);
-        toast.error("Some Error Occured");
-        setOutput("An error occured while running the code.")
-    }
-    finally{
-        setIsLoading(false);
+      console.log(error);
+      toast.error("Some Error Occured");
+      setOutput("An error occured while running the code.");
+    } finally {
+      setIsLoading(false);
     }
   };
 

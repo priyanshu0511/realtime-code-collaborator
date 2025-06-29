@@ -3,7 +3,7 @@ import { LANGUAGE_VERSIONS } from "../constants";
 
 const languages = Object.entries(LANGUAGE_VERSIONS);
 
-const LanguageSelector = ({language, onLanguageChange}) => {
+const LanguageSelector = ({ language, onLanguageChange }) => {
   return (
     <div className="mt-10 flex justify-start pl-10">
       <form className="bg-darkBg p-6 rounded-lg shadow-lg w-full max-w-md">
@@ -14,12 +14,13 @@ const LanguageSelector = ({language, onLanguageChange}) => {
           Select a Language:
         </label>
         <select
+          value={language}
           id="languages"
           onChange={(e) => onLanguageChange(e.target.value)}
           className="block w-full p-2 bg-gray-800 text-gray-100 border border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
         >
           {languages.map(([language, version]) => (
-            <option key={language} value={language} className="bg-gray-900" >
+            <option key={language} value={language} className="bg-gray-900">
               {language} ({version})
             </option>
           ))}
@@ -30,4 +31,3 @@ const LanguageSelector = ({language, onLanguageChange}) => {
 };
 
 export default LanguageSelector;
-

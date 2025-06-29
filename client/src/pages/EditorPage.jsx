@@ -75,7 +75,7 @@ const EditorPage = () => {
   return (
     <div className="flex h-screen">
       <div className="w-1/5 bg-gray-900">
-        <Sidebar clients={clients} />
+        <Sidebar clients={clients} roomId={roomId} />
       </div>
       <div className="w-4/5">
         <CodeEditor socketRef={socketRef} roomId={roomId} />
