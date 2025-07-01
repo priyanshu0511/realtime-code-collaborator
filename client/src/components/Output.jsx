@@ -27,8 +27,8 @@ const Output = ({ editorRef, language }) => {
   };
 
   return (
-    <div className="mt-5 border-l border-gray-600 h-screen px-3">
-      <div className="bg-darkBg font-semibold text-gray-100 pt-7 text-2xl rounded-lg shadow-lg w-full max-w-md mb-3">
+    <div className="mt-5 border-l border-gray-600 h-screen px-3 bg-darkBg">
+      <div className=" font-semibold text-gray-100 pt-7 text-2xl rounded-lg shadow-lg w-full max-w-md mb-3">
         Output-
       </div>
       <button

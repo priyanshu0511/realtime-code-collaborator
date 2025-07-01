@@ -101,8 +101,8 @@ const CodeEditor = ({ socketRef, roomId }) => {
   };
 
   return (
-    <div className="flex">
-      <div className="text-light w-1/2">
+    <div className="flex md:flex-row flex-col bg-darkBg">
+      <div className="text-light md:w-1/2 w-full">
         <LanguageSelector
           language={language}
           onLanguageChange={onLanguageChange}
@@ -117,7 +117,7 @@ const CodeEditor = ({ socketRef, roomId }) => {
           onMount={onMount}
         />
       </div>
-      <div className="w-1/2 text-light">
+      <div className="md:w-1/2 w-full text-light">
         <Output editorRef={editorRef} language={language} />
       </div>
     </div>

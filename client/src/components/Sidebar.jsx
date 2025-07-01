@@ -36,13 +36,13 @@ const Sidebar = ({ clients, roomId }) => {
       <div className="flex justify-center items-center flex-col mt-3 gap-2">
         <button
           onClick={copyRoomId}
-          className="bg-green-700 px-2 py-1 w-6/12 rounded-sm hover:cursor-pointer hover:bg-green-600"
+          className="bg-green-700 px-1.5 py-1 w-6/12 rounded-sm hover:cursor-pointer hover:bg-green-600"
         >
           Copy Room ID
         </button>
         <button
           onClick={handleLeaveRoom}
-          className="bg-red-600 px-2 py-1 w-6/12 rounded-sm hover:cursor-pointer hover:bg-red-500"
+          className="bg-red-600 px-1.5 py-1 w-6/12 rounded-sm hover:cursor-pointer hover:bg-red-500"
         >
           Leave Room
         </button>
