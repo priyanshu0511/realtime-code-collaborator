@@ -33,13 +33,13 @@ const HomePage = () => {
 
   return (
     <div className="flex justify-center items-center h-screen">
-      <div className="border-gray-400 border-4 h-3/4 w-1/2">
+      <div className="border-gray-400 border-4 h-3/4 w-11/12 md:h-3/4 md:w-1/2">
         <div className="px-4 py-4">
           <img src={Logo} alt="Logo" className="mx-auto h-16" />
         </div>
-        <div className="flex justify-center items-center flex-col gap-4">
-          <h1 className="text-light text-3xl">Enter the ROOM ID</h1>
-          <form className="flex justify-center items-center flex-col w-11/12 gap-8 mt-4 mb-6">
+        <div className="flex justify-center items-center flex-col gap-3 xl:gap-4">
+          <h1 className="text-light text-xl md:text-3xl">Enter the ROOM ID</h1>
+          <form className="flex justify-center items-center flex-col w-11/12 gap-5 xl:gap-8 mt-4 mb-6">
             <div className="w-full">
               <input
                 type="text"
@@ -77,8 +77,9 @@ const HomePage = () => {
           </form>
           <p className="text-light">
             Don't have a room ID?{" "}
+            <br className="md:hidden" />
             <span
-              className="text-green-500 underline hover:text-green-300 hover:cursor-pointer"
+              className="text-green-500 underline flex justify-center hover:text-green-300 hover:cursor-pointer"
               onClick={generateRoomId}
             >
               Create New Room

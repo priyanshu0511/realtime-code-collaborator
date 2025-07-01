@@ -8,9 +8,22 @@ const CodeEditor = ({ socketRef, roomId }) => {
   const editorRef = useRef(null);
   const [value, setValue] = useState(CODE_SNIPPETS["javascript"]);
   const [language, setLanguage] = useState("javascript");
+  const [isDeviceMedium, setIsDeviceMedium] = useState(false);
 
   // Prevent rebroadcast of remote code
   const isRemoteUpdate = useRef(false);
+
+  useEffect(() => {
+    
+    const checkDevice = () => setIsDeviceMedium(window.innerWidth<768);
+    checkDevice();
+    window.addEventListener("resize",checkDevice)
+  
+    return () => {
+      window.removeEventListener("resize",checkDevice)
+    }
+  }, [])
+  
 
   useEffect(() => {
     if (!socketRef.current) return;
@@ -109,7 +122,7 @@ const CodeEditor = ({ socketRef, roomId }) => {
         />
         <Editor
           key={language}
-          height="75vh"
+          height={isDeviceMedium?"60vh":"75vh"}
           theme="vs-dark"
           language={language}
           value={value}
