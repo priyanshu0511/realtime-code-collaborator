@@ -7,18 +7,17 @@ const app = express();
 
 app.use(cors());
 
+const PORT = process.env.PORT || 5000;
+const HOST = "0.0.0.0";
+
 app.get("/", (req, res) => {
   res.send("Server is running");
 });
 
-
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: 
-      ["http://localhost:5173",
-        "https://codesynced.vercel.app"
-      ],
+    origin: ["http://localhost:5173", "https://codesynced.vercel.app"],
     methods: ["GET", "POST"],
   },
 });
@@ -45,9 +44,9 @@ io.on("connection", (socket) => {
     socket.join(roomId);
     const clients = getAllConnectedClients(roomId);
 
-    if(roomData[roomId]){
+    if (roomData[roomId]) {
       // console.log("Sending sync-data to", socket.id, roomData[roomId]);
-      socket.emit('sync-code',roomData[roomId]);
+      socket.emit("sync-code", roomData[roomId]);
     }
 
     //Notify all users that new user has joined-
@@ -73,23 +72,22 @@ io.on("connection", (socket) => {
 
   socket.on("code-change", ({ roomId, code }) => {
     // console.log(`Code received from ${socket.id} for room ${roomId}`);
-    roomData[roomId]={
-      ...(roomData[roomId]||{}),
-      code
-    }
+    roomData[roomId] = {
+      ...(roomData[roomId] || {}),
+      code,
+    };
     socket.in(roomId).emit("code-change", { code });
   });
 
   socket.on("language-change", ({ roomId, language }) => {
-    roomData[roomId]={
-      ...(roomData[roomId]||{}),
-      language
-    }
+    roomData[roomId] = {
+      ...(roomData[roomId] || {}),
+      language,
+    };
     socket.in(roomId).emit("language-change", { language });
   });
 });
 
-const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
-  console.log(`Server running at PORT ${PORT}`);
+  console.log(`Server running at PORT :${HOST}/${PORT}`);
 });
