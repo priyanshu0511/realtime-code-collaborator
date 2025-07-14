@@ -6,11 +6,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
 
 function App() {
-  useEffect(() => {
-    fetch("/api/wakeup")
-      .then(() => console.log("Backend wake-up sent"))
-      .catch((err) => console.error("Wake-up failed", err));
-  }, []);
 
   return (
     <div className="h-screen bg-darkBg">
