@@ -10,7 +10,7 @@ function App() {
     const wakeUpServer = async () => {
       try {
         await fetch(
-          "https://realtime-collaborative-code-editor-8fu4.onrender.com"
+          import.meta.env.VITE_BACKEND_URL
         );
       } catch (err) {
         console.error("Failed to wake backend", err);
