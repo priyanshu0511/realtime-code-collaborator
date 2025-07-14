@@ -3,8 +3,23 @@ import HomePage from "./pages/HomePage";
 import EditorPage from "./pages/EditorPage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useEffect } from "react";
 
 function App() {
+  useEffect(() => {
+    const wakeUpServer = async () => {
+      try {
+        await fetch(
+          "https://realtime-collaborative-code-editor-8fu4.onrender.com"
+        );
+      } catch (err) {
+        console.error("Failed to wake backend", err);
+      }
+    };
+
+    wakeUpServer();
+  }, []);
+
   return (
     <div className="h-screen bg-darkBg">
       <Router>
