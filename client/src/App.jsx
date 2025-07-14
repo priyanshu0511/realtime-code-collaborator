@@ -7,17 +7,9 @@ import { useEffect } from "react";
 
 function App() {
   useEffect(() => {
-    const wakeUpServer = async () => {
-      try {
-        await fetch(
-          import.meta.env.VITE_BACKEND_URL
-        );
-      } catch (err) {
-        console.error("Failed to wake backend", err);
-      }
-    };
-
-    wakeUpServer();
+    fetch("/api/wakeup")
+      .then(() => console.log("Backend wake-up sent"))
+      .catch((err) => console.error("Wake-up failed", err));
   }, []);
 
   return (
