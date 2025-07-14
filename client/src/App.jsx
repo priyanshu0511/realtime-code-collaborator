@@ -7,17 +7,9 @@ import { useEffect } from "react";
 
 function App() {
   useEffect(() => {
-    const wakeUpServer = async () => {
-      try {
-        await fetch(
-          "https://realtime-collaborative-code-editor-8fu4.onrender.com"
-        );
-      } catch (err) {
-        console.error("Failed to wake backend", err);
-      }
-    };
-
-    wakeUpServer();
+    fetch("/api/wakeup")
+      .then(() => console.log("Backend wake-up sent"))
+      .catch((err) => console.error("Wake-up failed", err));
   }, []);
 
   return (
